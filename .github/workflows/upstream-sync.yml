@@ -1,0 +1,19 @@
+name: Upstream Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # 每天 UTC 0 点，北京时间早上 8 点
+  workflow_dispatch:       # 允许在 Actions 页面手动点一下运行
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.repository.fork }}
+    steps:
+      - name: Sync fork
+        run: gh repo sync "${{ github.repository }}" --source linguo2625469/workbuddy2api-panel --branch main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
